@@ -21,7 +21,7 @@ function board(data, type, handleCellClick) {
         cell.classList.add('hit');
       }
 
-      if (type === 'enemy') {
+      if (handleCellClick) {
         cell.addEventListener('click', () => handleCellClick({ x: cell.dataset.x, y: cell.dataset.y }));
       }
 

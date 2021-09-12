@@ -30,13 +30,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #5c5b5b;
+  color: #518cfb;
 }
 
 .ship {
-  background-color: #71b7ff;
+  background-color: #d0d0d0;
 }
 
 .hit {
-  color: black;
+  color: #fb5151;
 }

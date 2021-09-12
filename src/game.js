@@ -18,7 +18,7 @@ export default function game() {
     player.attack(data.x, data.y, enemy);
   };
 
-  const playerBoardDiv = boardCard(player1board.getArray(), { title: 'Your task force', type: 'player' }, handleCellClick);
+  const playerBoardDiv = boardCard(player1board.getArray(), { title: 'Your task force', type: 'player' });
   const enemyBoardDiv = boardCard(player2board.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleCellClick);
 
   gamearea.appendChild(playerBoardDiv);
