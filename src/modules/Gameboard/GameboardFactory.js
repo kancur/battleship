@@ -3,6 +3,7 @@ import ShipFactory from '../Ship/ShipFactory';
 
 export default function GameBoardFactory() {
   const EDGE_SIZE = 10;
+  const myShips = [];
   const matrice = Array2D(
     EDGE_SIZE,
     {
@@ -45,42 +46,42 @@ export default function GameBoardFactory() {
         },
       );
     }
-    return true;
+
+    myShips.push(ship);
+    return ship;
   };
 
   const receiveAttack = (x, y) => {
-    const data = matrice.getSingleValue(x, y);
+    const cell = matrice.getSingleValue(x, y);
+    let data = {};
 
     // throw error if the cell was already hit
-    if (data.isHit === true) {
+    if (cell.isHit === true) {
       throw new Error('Cannot hit the same place twice');
     }
 
     // register a ship hit if there's a ship on the coords and is not hit
-    if (data.isShip instanceof ShipFactory && data.isHit === false) {
-      data.isShip.hit();
-      matrice.setSingleValue(
-        x,
-        y,
-        {
-          isShip: data.isShip,
-          isHit: true,
-        },
-      );
+    if (cell.isShip !== false && cell.isHit === false) {
+      cell.isShip.hit();
+      data = {
+        isShip: cell.isShip,
+        isHit: true,
+      };
     }
 
     // register a missed hit
-    if (data.isShip === false && data.isHit === false) {
-      matrice.setSingleValue(
-        x,
-        y,
-        {
-          isShip: false,
-          isHit: true,
-        },
-      );
+    if (cell.isShip === false && cell.isHit === false) {
+      data = {
+        isShip: false,
+        isHit: true,
+      };
     }
+
+    matrice.setSingleValue(x, y, data);
+    return data;
   };
 
-  return { placeShip, receiveAttack };
+  const areAllShipsSunk = () => myShips.every((ship) => ship.isSunk());
+
+  return { placeShip, receiveAttack, areAllShipsSunk };
 }
