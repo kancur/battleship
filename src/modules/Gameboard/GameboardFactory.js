@@ -83,5 +83,9 @@ export default function GameBoardFactory() {
 
   const areAllShipsSunk = () => myShips.every((ship) => ship.isSunk());
 
-  return { placeShip, receiveAttack, areAllShipsSunk };
+  const getArray = () => matrice.getArray();
+
+  return {
+    placeShip, receiveAttack, areAllShipsSunk, getArray,
+  };
 }
