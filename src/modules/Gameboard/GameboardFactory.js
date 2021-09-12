@@ -51,13 +51,41 @@ export default function GameBoardFactory() {
     return ship;
   };
 
+  const autoPlaceShips = (arrayOfLengths) => {
+    arrayOfLengths.forEach((shipLength) => {
+      const calculateCoordsAndPlace = () => {
+        let x;
+        let y;
+        const isVertical = Math.random() < 0.5;
+        if (isVertical) {
+          y = Math.floor(Math.random() * (EDGE_SIZE - shipLength));
+          x = Math.floor(Math.random() * EDGE_SIZE);
+        } else {
+          x = Math.floor(Math.random() * (EDGE_SIZE - shipLength));
+          y = Math.floor(Math.random() * EDGE_SIZE);
+        }
+
+        try {
+          placeShip(x, y, isVertical, shipLength);
+        } catch (error) {
+          return 'error';
+        }
+      };
+
+      let status = '';
+      do {
+        status = calculateCoordsAndPlace();
+      } while (status === 'error');
+    });
+  };
+
   const receiveAttack = (x, y) => {
     const cell = matrice.getSingleValue(x, y);
     let data = {};
 
     // throw error if the cell was already hit
     if (cell.isHit === true) {
-      throw new Error('Cannot hit the same place twice');
+      throw new Error(`Cannot hit the same place twice (${x}, ${y})`);
     }
 
     // register a ship hit if there's a ship on the coords and is not hit
@@ -86,6 +114,10 @@ export default function GameBoardFactory() {
   const getArray = () => matrice.getArray();
 
   return {
-    placeShip, receiveAttack, areAllShipsSunk, getArray,
+    placeShip,
+    receiveAttack,
+    areAllShipsSunk,
+    getArray,
+    autoPlaceShips,
   };
 }

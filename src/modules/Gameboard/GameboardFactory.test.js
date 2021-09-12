@@ -33,7 +33,7 @@ describe('gameboard factory methods', () => {
 
   it('Throw error if same cell attacked twice', () => {
     gameBoard.receiveAttack(3, 5);
-    expect(() => gameBoard.receiveAttack(3, 5)).toThrow('Cannot hit the same place twice');
+    expect(() => gameBoard.receiveAttack(3, 5)).toThrow();
   });
 
   it('Correctly return that not all ships are sunk', () => {
