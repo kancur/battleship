@@ -1,0 +1,38 @@
+.modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #00000025;
+  backdrop-filter: blur(2px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  position: relative;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px 40px;
+  box-shadow: 4px 5px 20px #00000066;
+}
+
+.modal-close {
+  border-radius: 33%;
+  color: #636363;
+  display: flex;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 35px;
+  align-items: center;
+  align-content: center;
+}
+
+.modal-close:hover {
+  background-color: #1f5a9a1a;
+}
+
+.visible {
+  display: flex;
+}

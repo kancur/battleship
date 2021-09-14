@@ -1,11 +1,15 @@
-import Board from './Board';
-import DestroyedShips from './DestroyedShips';
+import Board from './Components/Board';
+import DestroyedShips from './Components/DestroyedShips';
+import WinnerModal from './Components/WinnerAnouncement';
 
 export default function DOMmanager(playerBoard, enemyBoard, handleCellClick) {
   const gamearea = document.querySelector('.gamearea');
   const playerDestroyedShips = new DestroyedShips();
   const enemyDestroyedShips = new DestroyedShips();
 
+  const handleWin = async (name) => {
+    await WinnerModal.announceWinner(name);
+  };
 
   const cleanBoards = () => {
     gamearea.textContent = '';
@@ -24,7 +28,6 @@ export default function DOMmanager(playerBoard, enemyBoard, handleCellClick) {
   };
 
   const appendDestroyedShip = (ship, player) => {
-    console.log('appending destroyed ship', ship);
     // eslint-disable-next-line default-case
     switch (player) {
       case 'player':
@@ -36,5 +39,5 @@ export default function DOMmanager(playerBoard, enemyBoard, handleCellClick) {
     }
   };
 
-  return { renderBoards, appendDestroyedShip };
+  return { renderBoards, appendDestroyedShip, handleWin };
 }

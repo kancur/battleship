@@ -10,7 +10,6 @@ export default function Board(array, boardData, handleCellClick) {
   const boardWrap = document.createElement('div');
   const boardDiv = document.createElement('div');
   const boardTitle = heading(boardData.title);
-
   boardDiv.classList.add('board');
 
   array.forEach((rowData, y) => {

@@ -12,7 +12,6 @@ export default class DestroyedShips {
   }
 
   appendShip(ship) {
-    console.log(ship);
     const shipElement = document.createElement('div');
     shipElement.classList.add('destroyed-ship');
 

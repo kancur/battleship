@@ -1,11 +1,56 @@
+@font-face {
+  font-family: 'SourceCodePro';
+  src: url('./assets/SourceCodePro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+a {
+  color: #8dc3ff;
+}
+
+html {
+  margin: 0;
+  font-family: 'SourceCodePro';
+}
+
 body {
+  position: relative;
+  --navy-blue: #1069b5;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+header {
+  text-align: center;
+  background-color: var(--navy-blue);
+  color: whitesmoke;
+  padding: 15px;
+}
+
+footer {
+  padding: 20px;
+  text-align: center;
+  background-color: #4a4947;
+  color: white;
+}
+
+header h1 {
+  font-size: 50px;
+  margin: 0px;
+}
+
+header p {
+  margin: 0px;
 }
 
 .gamearea {
   width: 100%;
+  height: 100%;
   display: flex;
   gap: 4%;
   justify-content: center;
@@ -22,11 +67,12 @@ body {
   border-style: solid;
   border-width: 2px;
   border-color: var(--border-color);
+  margin-bottom: 30px;
 }
 
 .cell {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   background-color: white;
   display: flex;
   justify-content: center;
@@ -59,5 +105,13 @@ body {
 }
 
 .destroyed-ship .cell {
-  background-color: #ffb0b0;;
+  background-color: #ffb0b0;
+  ;
 }
+
+.destroyed-ships-wrapper {
+  background-color: #e2e2e2;
+  width: 100%;
+  padding: 0px 15px;
+}
+

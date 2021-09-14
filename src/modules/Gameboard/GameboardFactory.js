@@ -113,7 +113,6 @@ export default function GameBoardFactory() {
     }
 
     matrice.setSingleValue(x, y, data);
-    console.log('receive attack returning', data);
     return data;
   };
 
