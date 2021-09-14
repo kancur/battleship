@@ -13,6 +13,7 @@ body {
 }
 
 .board {
+  cursor: pointer;
   --border-color: rgb(34, 72, 128);
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -39,4 +40,8 @@ body {
 
 .hit {
   color: #fb5151;
+}
+
+.sunk {
+  background-color: #ffb0b0;
 }

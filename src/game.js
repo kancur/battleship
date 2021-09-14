@@ -1,26 +1,43 @@
-import boardCard from './dom/board';
+import DOMmanager from './dom/DOMmanager';
 import PlayerFactory from './modules/Player/PlayerFactory';
 
 export default function game() {
-  const gamearea = document.querySelector('.gamearea');
+  const SHIP_LENGTHS = [5, 4, 3, 3, 2];
   const player = PlayerFactory('Peter');
   const enemy = PlayerFactory('Jerry');
+  const playerBoardObj = player.getBoard();
+  const enemyBoardObj = enemy.getBoard();
 
-  const player1board = player.getBoard();
-  const player2board = enemy.getBoard();
-
-  player1board.placeShip(0, 0, false, 4);
-  player1board.placeShip(2, 4, true, 2);
-  player2board.placeShip(3, 3, true, 3);
-  enemy.attackAI(player);
 
   const handleCellClick = (data) => {
-    player.attack(data.x, data.y, enemy);
+    try {
+      player.attack(data.x, data.y, enemy);
+    } catch (error) {
+      console.log(error.message);
+      // silently discard the cannot hit the same place twice error
+      /*
+      if (error.message !== 'Cannot hit the same place twice') {
+        throw error;
+      }
+      */
+    }
+
+    const timer = ms => new Promise(res => setTimeout(res, ms));
+
+    async function load() { 
+      for (let i = 0; i < 20; i++) {
+        enemy.attackRandomPosition(player);
+        displayManager.renderBoards();
+        await timer(50); 
+      }
+    }
+
+    load();
   };
 
-  const playerBoardDiv = boardCard(player1board.getArray(), { title: 'Your task force', type: 'player' });
-  const enemyBoardDiv = boardCard(player2board.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleCellClick);
+  const displayManager = DOMmanager(playerBoardObj, enemyBoardObj, handleCellClick);
 
-  gamearea.appendChild(playerBoardDiv);
-  gamearea.appendChild(enemyBoardDiv);
+  playerBoardObj.autoPlaceShips(SHIP_LENGTHS);
+  enemyBoardObj.autoPlaceShips(SHIP_LENGTHS);
+  displayManager.renderBoards();
 }

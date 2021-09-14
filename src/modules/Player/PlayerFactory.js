@@ -2,7 +2,7 @@ import GameBoardFactory from '../Gameboard/GameboardFactory';
 
 export default function PlayerFactory(name) {
   const board = GameBoardFactory();
-  const arrayOfHitCoords = [];
+  const arrayOfHits = [];
 
   const getName = () => name;
   const getBoard = () => board;
@@ -12,20 +12,43 @@ export default function PlayerFactory(name) {
     return enemyBoard.receiveAttack(x, y);
   };
 
-  const attackAI = (enemyPlayer) => {
-    let randomCoords = {};
-
-    while (!(arrayOfHitCoords.includes(randomCoords))) {
-      randomCoords = {
-        x: Math.floor(Math.random() * 10),
-        y: Math.floor(Math.random() * 10),
-      };
-      arrayOfHitCoords.push(randomCoords);
+  const attackRandomPosition = (enemyPlayer) => {
+    if (arrayOfHits >= 100) {
+      return;
     }
-    return attack(randomCoords.x, randomCoords.y, enemyPlayer);
+    const randomSingleCoord = () => Math.floor(Math.random() * 10);
+
+    const randomCoords = () => ({
+      x: randomSingleCoord(),
+      y: randomSingleCoord(),
+    });
+
+    const wasAlreadyHit = (coords) => {
+      const result = arrayOfHits.some((el) => {
+        if (el.x === coords.x && el.y === coords.y) {
+          return true;
+        }
+        return false;
+      });
+      return result;
+    };
+
+    const getUniqueCoords = () => {
+      let coords = randomCoords();
+      if ((wasAlreadyHit(coords))) {
+        coords = getUniqueCoords();
+      }
+
+      return coords;
+    };
+
+    const uniqueCoords = getUniqueCoords();
+    arrayOfHits.push(uniqueCoords);
+
+    return attack(uniqueCoords.x, uniqueCoords.y, enemyPlayer);
   };
 
   return ({
-    getName, getBoard, attack, attackAI,
+    getName, getBoard, attack, attackRandomPosition,
   });
 }
