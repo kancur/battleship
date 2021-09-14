@@ -1,4 +1,4 @@
-import cell from './Cell';
+import Cell from './Cell';
 
 function heading(title) {
   const boardHeading = document.createElement('h2');
@@ -7,6 +7,7 @@ function heading(title) {
 }
 
 export default function Board(array, boardData, handleCellClick) {
+  console.log(array)
   const boardWrap = document.createElement('div');
   const boardDiv = document.createElement('div');
   const boardTitle = heading(boardData.title);
@@ -15,8 +16,7 @@ export default function Board(array, boardData, handleCellClick) {
 
   array.forEach((rowData, y) => {
     rowData.forEach((cellData, x) => {
-      const currentCell = cell(x, y, cellData, boardData, handleCellClick);
-
+      const currentCell = Cell(x, y, cellData, boardData, handleCellClick);
       boardDiv.appendChild(currentCell);
     });
   });

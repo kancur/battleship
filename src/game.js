@@ -7,32 +7,25 @@ export default function game() {
   const enemy = PlayerFactory('Jerry');
   const playerBoardObj = player.getBoard();
   const enemyBoardObj = enemy.getBoard();
+  let listenForClicks = true;
 
+  const oneGameTurn = async (data) => {
+    try {
+      if (listenForClicks) {
+        player.attack(data.x, data.y, enemy);
+        listenForClicks = false;
+        displayManager.renderBoards();
+        await enemy.delayedRandomAttack(100, player);
+        displayManager.renderBoards();
+        listenForClicks = true;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleCellClick = (data) => {
-    try {
-      player.attack(data.x, data.y, enemy);
-    } catch (error) {
-      console.log(error.message);
-      // silently discard the cannot hit the same place twice error
-      /*
-      if (error.message !== 'Cannot hit the same place twice') {
-        throw error;
-      }
-      */
-    }
-
-    const timer = ms => new Promise(res => setTimeout(res, ms));
-
-    async function load() { 
-      for (let i = 0; i < 20; i++) {
-        enemy.attackRandomPosition(player);
-        displayManager.renderBoards();
-        await timer(50); 
-      }
-    }
-
-    load();
+    oneGameTurn(data);
   };
 
   const displayManager = DOMmanager(playerBoardObj, enemyBoardObj, handleCellClick);
