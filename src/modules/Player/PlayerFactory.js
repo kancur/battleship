@@ -15,7 +15,7 @@ export default function PlayerFactory(name) {
   const delayedRandomAttack = async (delay, player) => {
     const timer = ms => new Promise(res => setTimeout(res, delay));
     await timer(500);
-    attackRandomPosition(player);
+    return attackRandomPosition(player);
   };
 
   const attackRandomPosition = (enemyPlayer) => {
@@ -51,7 +51,9 @@ export default function PlayerFactory(name) {
     const uniqueCoords = getUniqueCoords();
     arrayOfHits.push(uniqueCoords);
 
-    return attack(uniqueCoords.x, uniqueCoords.y, enemyPlayer);
+    const attackData = attack(uniqueCoords.x, uniqueCoords.y, enemyPlayer);
+    console.log('attack random position returning', attackData);
+    return attackData;
   };
 
   return ({

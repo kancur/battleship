@@ -7,7 +7,6 @@ function heading(title) {
 }
 
 export default function Board(array, boardData, handleCellClick) {
-  console.log(array)
   const boardWrap = document.createElement('div');
   const boardDiv = document.createElement('div');
   const boardTitle = heading(boardData.title);

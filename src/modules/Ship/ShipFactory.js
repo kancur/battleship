@@ -8,5 +8,7 @@ export default function ShipFactory(length) {
 
   const isSunk = () => (numberOfHits === length);
 
-  return { hit, isSunk };
+  const getLength = () => length;
+
+  return { hit, isSunk, getLength };
 }

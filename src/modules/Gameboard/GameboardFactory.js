@@ -74,7 +74,6 @@ export default function GameBoardFactory() {
         try {
           placeShip(x, y, isVertical, shipLength);
         } catch (error) {
-          console.log(error)
           return 'error';
         }
       };
@@ -101,6 +100,7 @@ export default function GameBoardFactory() {
       data = {
         isShip: cell.isShip,
         isHit: true,
+        isSunk: cell.isShip.isSunk(),
       };
     }
 
@@ -113,6 +113,7 @@ export default function GameBoardFactory() {
     }
 
     matrice.setSingleValue(x, y, data);
+    console.log('receive attack returning', data);
     return data;
   };
 

@@ -12,10 +12,17 @@ export default function game() {
   const oneGameTurn = async (data) => {
     try {
       if (listenForClicks) {
-        player.attack(data.x, data.y, enemy);
+        const attackData = player.attack(data.x, data.y, enemy);
+        if (attackData?.isSunk === true) {
+          displayManager.appendDestroyedShip(attackData.isShip, 'enemy');
+        }
         listenForClicks = false;
         displayManager.renderBoards();
-        await enemy.delayedRandomAttack(100, player);
+
+        const enemyAttackData = await enemy.delayedRandomAttack(100, player);
+        if (enemyAttackData?.isSunk === true) {
+          displayManager.appendDestroyedShip(enemyAttackData.isShip, 'player');
+        }
         displayManager.renderBoards();
         listenForClicks = true;
       }
