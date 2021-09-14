@@ -14,7 +14,7 @@ export default function GameBoardFactory() {
 
   const placeShip = (x, y, isVertical, length) => {
     const ship = ShipFactory(length);
-
+    const preparedCoords = [];
     for (let i = 0; i < length; i += 1) {
       let yAxis;
       let xAxis;
@@ -37,15 +37,21 @@ export default function GameBoardFactory() {
         throw new Error('Ship overlaps already existing ship');
       }
 
+      // have to push coords into a list instead of directly settting values
+      // because the ship might overlap and then I just want to throw it
+      preparedCoords.push({ xAxis, yAxis });
+    }
+
+    preparedCoords.forEach((coords) => {
       matrice.setSingleValue(
-        xAxis,
-        yAxis,
+        coords.xAxis,
+        coords.yAxis,
         {
           isShip: ship,
           isHit: false,
         },
       );
-    }
+    });
 
     myShips.push(ship);
     return ship;
@@ -68,6 +74,7 @@ export default function GameBoardFactory() {
         try {
           placeShip(x, y, isVertical, shipLength);
         } catch (error) {
+          console.log(error)
           return 'error';
         }
       };
@@ -111,6 +118,8 @@ export default function GameBoardFactory() {
 
   const areAllShipsSunk = () => myShips.every((ship) => ship.isSunk());
 
+  const getSunkShips = () => myShips.filter((ship) => ship.isSunk());
+
   const getArray = () => matrice.getArray();
 
   return {
@@ -119,5 +128,6 @@ export default function GameBoardFactory() {
     areAllShipsSunk,
     getArray,
     autoPlaceShips,
+    getSunkShips,
   };
 }

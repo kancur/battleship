@@ -12,6 +12,12 @@ export default function PlayerFactory(name) {
     return enemyBoard.receiveAttack(x, y);
   };
 
+  const delayedRandomAttack = async (delay, player) => {
+    const timer = ms => new Promise(res => setTimeout(res, delay));
+    await timer(500);
+    attackRandomPosition(player);
+  };
+
   const attackRandomPosition = (enemyPlayer) => {
     if (arrayOfHits >= 100) {
       return;
@@ -49,6 +55,6 @@ export default function PlayerFactory(name) {
   };
 
   return ({
-    getName, getBoard, attack, attackRandomPosition,
+    getName, getBoard, attack, attackRandomPosition, delayedRandomAttack,
   });
 }
