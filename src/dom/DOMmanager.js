@@ -6,9 +6,14 @@ export default function DOMmanager(playerBoard, enemyBoard, handleCellClick) {
   const gamearea = document.querySelector('.gamearea');
   const playerDestroyedShips = new DestroyedShips();
   const enemyDestroyedShips = new DestroyedShips();
+  let showingModal = false;
 
   const handleWin = async (name) => {
-    await WinnerModal.announceWinner(name);
+    if (!showingModal) {
+      showingModal = true;
+      await WinnerModal.announceWinner(name);
+      showingModal = false;
+    }
   };
 
   const cleanBoards = () => {

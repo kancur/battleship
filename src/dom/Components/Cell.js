@@ -4,7 +4,7 @@ export default function cell(x, y, cellData, boardData, handleCellClick) {
   cell.dataset.x = x;
   cell.dataset.y = y;
 
-  if (cellData.isShip !== false && boardData.type === 'player') {
+  if (cellData.isShip !== false && "boardData.type === 'player'") {
     cell.classList.add('ship');
   }
 

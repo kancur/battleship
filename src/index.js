@@ -1,4 +1,4 @@
 import './style.css';
-import game from './game';
+import play from './game';
 
-game();
+play();
