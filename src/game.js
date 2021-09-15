@@ -14,6 +14,7 @@ export function game() {
       handleEnemyCellClick,
       handlePlayerCellClick,
       handlePlayerCellHover,
+      rotateHandler,
     );
 
     getPlayerName();
@@ -22,6 +23,11 @@ export function game() {
     let nextPlayer = 'player';
     let placingShips = true;
     let currentShipID = 0;
+    let isShipVertical = false;
+
+    function rotateHandler() {
+      isShipVertical = !isShipVertical;
+    }
 
     async function getPlayerName() {
       const name = await displayManager.showNameModal();
@@ -94,7 +100,7 @@ export function game() {
             playerBoard.previewShipPlacement(
               Number(data.x),
               Number(data.y),
-              false,
+              isShipVertical,
               SHIP_LENGTHS[currentShipID],
             );
             displayManager.renderBoards();
@@ -112,7 +118,7 @@ export function game() {
             playerBoard.placeShip(
               Number(data.x),
               Number(data.y),
-              false,
+              isShipVertical,
               SHIP_LENGTHS[currentShipID],
             );
             currentShipID += 1;
@@ -127,6 +133,7 @@ export function game() {
           currentShipID = 0;
           listenForClicksEnemyBoard = true;
           await playerBoard.cleanPreviousPreview();
+          displayManager.setBoardsType('game');
           displayManager.renderBoards();
         }
       }

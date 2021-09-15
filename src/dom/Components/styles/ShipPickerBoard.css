@@ -1,0 +1,26 @@
+.shippicker {
+  --picker-background: #ef5c5c;
+  position: absolute;
+  left: 30px;
+  top: 180px;
+  background-color: var(--picker-background);
+  padding: 20px;
+  box-shadow: 3px 3px 6px #00000021;
+}
+
+.arrow-left {
+  --arrow-size: 25px;
+  width: 0; 
+  height: 0; 
+  border-top: var(--arrow-size) solid transparent;
+  border-bottom: var(--arrow-size) solid transparent; 
+  border-right:var(--arrow-size) solid var(--picker-background); 
+  position: absolute;
+  top: calc(50% - var(--arrow-size));
+  left: calc(0px - var(--arrow-size));
+}
+
+.shippicker h2 {
+  color: white;
+  margin: 0 10px 15px 0;
+}

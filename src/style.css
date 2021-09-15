@@ -53,11 +53,14 @@ header p {
   display: flex;
   flex-grow: 1;
   gap: 4%;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: row;
+  
 }
 
 .board {
+  margin: 0 auto 0 auto;
+  width: fit-content;
   cursor: crosshair;
   --border-color: rgb(34, 72, 128);
   display: grid;
@@ -68,6 +71,18 @@ header p {
   border-width: 2px;
   border-color: var(--border-color);
   margin-bottom: 30px;
+}
+
+.board-wrap {
+  flex-basis: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.boards-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 .cell {
@@ -111,14 +126,20 @@ header p {
 
 .destroyed-ships-wrapper {
   background-color: #e2e2e2;
-  width: 100%;
+  min-width: 230px;
   padding: 0px 15px;
 }
 
 .preview {
-  background-color:rgb(127, 235, 127);
+  background-color: rgb(127, 235, 127);
 }
 
 .modal-box input, button {
   font-size: 1.2em;
+}
+
+.modal-box h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-top: 4px;
 }

@@ -45,7 +45,6 @@ export default function GameBoardFactory() {
 
   let previousPreparedCoords = [];
   const cleanPreviousPreview = async () => {
-    console.log('clenaing previous', previousPreparedCoords)
     await previousPreparedCoords.forEach((coords) => {
       matrice.writeSingleCellObjectValue(
         coords.xAxis,

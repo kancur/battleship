@@ -20,6 +20,7 @@ class EnterName {
 
       const input = document.createElement('input');
       input.placeholder = 'Your name';
+      input.type = 'text';
       input.addEventListener('input', (event) => {
         name = event.target.value;
       });

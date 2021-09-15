@@ -1,6 +1,7 @@
 import Board from './Components/Board';
 import DestroyedShips from './Components/DestroyedShips';
 import EnterName from './Components/NameInput';
+import ShipPickerBoard from './Components/ShipPickerBoard';
 import WinnerModal from './Components/WinnerAnouncement';
 
 export default function DOMmanager(
@@ -9,12 +10,16 @@ export default function DOMmanager(
   handleEnemyCellClick,
   handlePlayerCellClick,
   handlePlayerCellHover,
+  rotateHandler,
 ) {
   const gamearea = document.querySelector('.gamearea');
   const playerDestroyedShips = new DestroyedShips();
   const enemyDestroyedShips = new DestroyedShips();
   let showingModal = false;
   let playerName = 'Player';
+  let boardsType = 'intro';
+
+  const setBoardsType = (name) => { boardsType = name; };
 
   const showWinModal = async (name) => {
     if (!showingModal) {
@@ -43,10 +48,21 @@ export default function DOMmanager(
 
     const playerBoardDOM = Board(playerBoard.getArray(), { title: `${playerName}'s task force`, type: 'player' }, handlePlayerCellClick, handlePlayerCellHover);
     const enemyBoardDOM = Board(enemyBoard.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleEnemyCellClick);
+    const shipPickerBoard = ShipPickerBoard(rotateHandler);
+
+    const boards = document.createElement('div');
+    boards.classList.add('boards-wrapper');
 
     gamearea.appendChild(playerDestroyedShips.getElement());
-    gamearea.appendChild(playerBoardDOM.getBoardDiv());
-    gamearea.appendChild(enemyBoardDOM.getBoardDiv());
+    boards.appendChild(playerBoardDOM.getBoardDiv());
+
+    if (boardsType === 'game') {
+      boards.append(enemyBoardDOM.getBoardDiv());
+    }
+    if (boardsType === 'intro') {
+      boards.appendChild(shipPickerBoard);
+    }
+    gamearea.appendChild(boards);
     gamearea.appendChild(enemyDestroyedShips.getElement());
   };
 
@@ -73,5 +89,6 @@ export default function DOMmanager(
     handleWin: showWinModal,
     showNameModal,
     setPlayerName,
+    setBoardsType,
   };
 }
