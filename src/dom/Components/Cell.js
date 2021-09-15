@@ -1,28 +1,36 @@
-export default function cell(x, y, cellData, boardData, handleCellClick) {
-  const cell = document.createElement('div');
-  cell.classList.add('cell');
-  cell.dataset.x = x;
-  cell.dataset.y = y;
+export default function cell(x, y, cellData, boardData, handleCellClick, handleCellHover) {
+  const cellEl = document.createElement('div');
+  cellEl.classList.add('cell');
+  cellEl.dataset.x = x;
+  cellEl.dataset.y = y;
 
   if (cellData.isShip !== false && boardData.type === 'player') {
-    cell.classList.add('ship');
+    cellEl.classList.add('ship');
+  }
+
+  if (cellData.isPhantom === true) {
+    cellEl.classList.add('phantom');
   }
 
   if (cellData.isShip === false && cellData.isHit === true) {
-    cell.textContent = '⬤';
+    cellEl.textContent = '⬤';
   }
   if (cellData.isShip !== false && cellData.isHit === true) {
-    cell.textContent = '⬤';
-    cell.classList.add('hit');
+    cellEl.textContent = '⬤';
+    cellEl.classList.add('hit');
 
     if (cellData.isShip.isSunk()) {
-      cell.classList.add('sunk');
+      cellEl.classList.add('sunk');
     }
   }
 
   if (handleCellClick) {
-    cell.addEventListener('click', () => handleCellClick({ x: cell.dataset.x, y: cell.dataset.y }));
+    cellEl.addEventListener('click', () => handleCellClick({ x: cellEl.dataset.x, y: cellEl.dataset.y }));
   }
 
-  return cell;
+  if (handleCellHover) {
+    cellEl.addEventListener('mouseenter', () => handleCellHover({ x: cellEl.dataset.x, y: cellEl.dataset.y }));
+  }
+
+  return cellEl;
 }

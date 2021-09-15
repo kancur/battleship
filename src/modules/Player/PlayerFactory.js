@@ -9,8 +9,34 @@ export default function PlayerFactory(name) {
 
   const attack = (x, y, enemyPlayer) => {
     const enemyBoard = enemyPlayer.getBoard();
+    arrayOfHits.push({ x, y });
     return enemyBoard.receiveAttack(x, y);
   };
+
+  /**
+  * Returns an object with x and y coords that have not been hit before.
+  * @param {object} coords Object with x and y keys (coordinates).
+  */
+  const wasAlreadyHit = (coords) => {
+    const result = arrayOfHits.some((el) => {
+      if (el.x === coords.x && el.y === coords.y) {
+        return true;
+      }
+      return false;
+    });
+    return result;
+  };
+
+  /*
+  const smartAttack = (enemyPlayer) => {
+    if (arrayOfHits.length === 1) {
+      const { x, y } = (arrayOfHits[arrayOfHits.length - 1]);
+
+      wasAlreadyHit({ x, y });
+      attack(x + 1, y, enemyPlayer);
+    }
+  };
+  */
 
   const attackRandomPosition = (enemyPlayer) => {
     if (arrayOfHits >= 100) {
@@ -23,27 +49,18 @@ export default function PlayerFactory(name) {
       y: randomSingleCoord(),
     });
 
-    const wasAlreadyHit = (coords) => {
-      const result = arrayOfHits.some((el) => {
-        if (el.x === coords.x && el.y === coords.y) {
-          return true;
-        }
-        return false;
-      });
-      return result;
-    };
-
+    /**
+   * Returns an object with x and y coords that have not been hit before.
+   */
     const getUniqueCoords = () => {
       let coords = randomCoords();
       if ((wasAlreadyHit(coords))) {
         coords = getUniqueCoords();
       }
-
       return coords;
     };
 
     const uniqueCoords = getUniqueCoords();
-    arrayOfHits.push(uniqueCoords);
 
     const attackData = attack(uniqueCoords.x, uniqueCoords.y, enemyPlayer);
     // eslint-disable-next-line consistent-return

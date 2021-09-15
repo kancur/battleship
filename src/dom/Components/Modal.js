@@ -1,7 +1,7 @@
 import closeIcon from './closeIcon';
 import './styles/Modal.css';
 
-export default class Modal {
+class Modal {
   constructor() {
     this.modal = document.querySelector('.modal');
     this.content = document.createElement('div');
@@ -41,3 +41,5 @@ export default class Modal {
     this.content.innerText = '';
   }
 }
+
+export default new Modal();

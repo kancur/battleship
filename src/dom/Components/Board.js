@@ -6,15 +6,15 @@ function heading(title) {
   return boardHeading;
 }
 
-export default function Board(array, boardData, handleCellClick) {
+export default function Board(array, boardData, handleCellClick, handleCellHover) {
   const boardWrap = document.createElement('div');
   const boardDiv = document.createElement('div');
-  const boardTitle = heading(boardData.title);
+  const boardTitle = heading(boardData?.title);
   boardDiv.classList.add('board');
 
   array.forEach((rowData, y) => {
     rowData.forEach((cellData, x) => {
-      const currentCell = Cell(x, y, cellData, boardData, handleCellClick);
+      const currentCell = Cell(x, y, cellData, boardData, handleCellClick, handleCellHover);
       boardDiv.appendChild(currentCell);
     });
   });

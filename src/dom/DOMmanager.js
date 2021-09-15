@@ -2,7 +2,7 @@ import Board from './Components/Board';
 import DestroyedShips from './Components/DestroyedShips';
 import WinnerModal from './Components/WinnerAnouncement';
 
-export default function DOMmanager(playerBoard, enemyBoard, handleCellClick) {
+export default function DOMmanager(playerBoard, enemyBoard, handleEnemyCellClick, handlePlayerCellClick) {
   const gamearea = document.querySelector('.gamearea');
   const playerDestroyedShips = new DestroyedShips();
   const enemyDestroyedShips = new DestroyedShips();
@@ -23,8 +23,8 @@ export default function DOMmanager(playerBoard, enemyBoard, handleCellClick) {
   const renderBoards = () => {
     cleanBoards();
 
-    const playerBoardDOM = Board(playerBoard.getArray(), { title: 'Your task force', type: 'player' });
-    const enemyBoardDOM = Board(enemyBoard.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleCellClick);
+    const playerBoardDOM = Board(playerBoard.getArray(), { title: 'Your task force', type: 'player' }, handlePlayerCellClick);
+    const enemyBoardDOM = Board(enemyBoard.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleEnemyCellClick);
 
     gamearea.appendChild(playerDestroyedShips.getElement());
     gamearea.appendChild(playerBoardDOM.getBoardDiv());

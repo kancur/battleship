@@ -1,5 +1,6 @@
 import Array2D from '../Helpers/Array2d';
 import ShipFactory from '../Ship/ShipFactory';
+import { OutOfBoundsError, OverlapError } from './CustomErrors';
 
 export default function GameBoardFactory() {
   const EDGE_SIZE = 10;
@@ -29,16 +30,16 @@ export default function GameBoardFactory() {
       }
 
       if (yAxis >= EDGE_SIZE || xAxis >= EDGE_SIZE) {
-        throw new Error("Ship doesn't fit the gameboard");
+        throw new OutOfBoundsError("Ship doesn't fit the gameboard");
       }
 
       const currentDataOnPosition = matrice.getSingleValue(xAxis, yAxis);
       if (currentDataOnPosition.isShip !== false) {
-        throw new Error('Ship overlaps already existing ship');
+        throw new OverlapError('Ship overlaps already existing ship');
       }
 
       // have to push coords into a list instead of directly settting values
-      // because the ship might overlap and then I just want to throw it
+      // because the ship might overlap and then I just want to throw it away
       preparedCoords.push({ xAxis, yAxis });
     }
 

@@ -2,7 +2,7 @@ import Modal from './Modal';
 
 class WinnerAnouncement {
   constructor() {
-    this.modal = new Modal();
+    this.modal = Modal;
   }
 
   async announceWinner(name) {
