@@ -44,8 +44,9 @@ export default function GameBoardFactory() {
   };
 
   let previousPreparedCoords = [];
-  const previewShipPlacement = (x, y, isVertical, length) => {
-    previousPreparedCoords.forEach((coords) => {
+  const cleanPreviousPreview = async () => {
+    console.log('clenaing previous', previousPreparedCoords)
+    await previousPreparedCoords.forEach((coords) => {
       matrice.writeSingleCellObjectValue(
         coords.xAxis,
         coords.yAxis,
@@ -53,7 +54,10 @@ export default function GameBoardFactory() {
         false,
       );
     });
+  };
 
+  const previewShipPlacement = (x, y, isVertical, length) => {
+    cleanPreviousPreview();
     const preparedCoords = prepareShipCoords(x, y, isVertical, length);
     previousPreparedCoords = preparedCoords;
 
@@ -68,7 +72,6 @@ export default function GameBoardFactory() {
   };
 
   const placeShip = (x, y, isVertical, length) => {
-    console.log('place ship')
     const ship = ShipFactory(length);
     const preparedCoords = prepareShipCoords(x, y, isVertical, length);
 
@@ -160,5 +163,6 @@ export default function GameBoardFactory() {
     autoPlaceShips,
     getSunkShips,
     previewShipPlacement,
+    cleanPreviousPreview,
   };
 }

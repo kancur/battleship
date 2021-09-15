@@ -1,5 +1,6 @@
 import Board from './Components/Board';
 import DestroyedShips from './Components/DestroyedShips';
+import EnterName from './Components/NameInput';
 import WinnerModal from './Components/WinnerAnouncement';
 
 export default function DOMmanager(
@@ -13,13 +14,24 @@ export default function DOMmanager(
   const playerDestroyedShips = new DestroyedShips();
   const enemyDestroyedShips = new DestroyedShips();
   let showingModal = false;
+  let playerName = 'Player';
 
-  const handleWin = async (name) => {
+  const showWinModal = async (name) => {
     if (!showingModal) {
       showingModal = true;
       await WinnerModal.announceWinner(name);
       showingModal = false;
     }
+  };
+
+  const showNameModal = async () => {
+    let name;
+    if (!showingModal) {
+      showingModal = true;
+      name = await EnterName.show();
+      showingModal = false;
+    }
+    return name || 'Player';
   };
 
   const cleanBoards = () => {
@@ -29,13 +41,18 @@ export default function DOMmanager(
   const renderBoards = () => {
     cleanBoards();
 
-    const playerBoardDOM = Board(playerBoard.getArray(), { title: 'Your task force', type: 'player' }, handlePlayerCellClick, handlePlayerCellHover);
+    const playerBoardDOM = Board(playerBoard.getArray(), { title: `${playerName}'s task force`, type: 'player' }, handlePlayerCellClick, handlePlayerCellHover);
     const enemyBoardDOM = Board(enemyBoard.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleEnemyCellClick);
 
     gamearea.appendChild(playerDestroyedShips.getElement());
     gamearea.appendChild(playerBoardDOM.getBoardDiv());
     gamearea.appendChild(enemyBoardDOM.getBoardDiv());
     gamearea.appendChild(enemyDestroyedShips.getElement());
+  };
+
+  const setPlayerName = (name) => {
+    playerName = name;
+    renderBoards();
   };
 
   const appendDestroyedShip = (ship, player) => {
@@ -50,5 +67,11 @@ export default function DOMmanager(
     }
   };
 
-  return { renderBoards, appendDestroyedShip, handleWin };
+  return {
+    renderBoards,
+    appendDestroyedShip,
+    handleWin: showWinModal,
+    showNameModal,
+    setPlayerName,
+  };
 }

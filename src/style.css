@@ -58,7 +58,7 @@ header p {
 }
 
 .board {
-  cursor: pointer;
+  cursor: crosshair;
   --border-color: rgb(34, 72, 128);
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -117,4 +117,8 @@ header p {
 
 .preview {
   background-color:rgb(127, 235, 127);
+}
+
+.modal-box input, button {
+  font-size: 1.2em;
 }

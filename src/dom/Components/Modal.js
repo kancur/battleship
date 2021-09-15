@@ -1,8 +1,8 @@
-import closeIcon from './closeIcon';
+import closeIcon from './CloseIcon';
 import './styles/Modal.css';
 
 class Modal {
-  constructor() {
+  constructor(showCloseIcon = true) {
     this.modal = document.querySelector('.modal');
     this.content = document.createElement('div');
 
@@ -10,17 +10,26 @@ class Modal {
     this.wrapper.classList.add('modal-box');
     this.wrapper.addEventListener('click', (e) => e.stopPropagation());
 
-    this.closeIcon = document.createElement('div');
-    this.closeIcon.classList.add('modal-close');
-    this.closeIcon.innerHTML += closeIcon;
-
-    this.wrapper.append(this.closeIcon, this.content);
+    this.wrapper.appendChild(this.content);
 
     this.modal.appendChild(this.wrapper);
   }
 
+  addCloseIcon() {
+    this.closeIcon = document.createElement('div');
+    this.closeIcon.classList.add('modal-close');
+    this.closeIcon.innerHTML += closeIcon;
+    this.wrapper.appendChild(this.closeIcon);
+  }
+
+  showOwnPromise(element) {
+    this.content.appendChild(element);
+    this.modal.classList.add('visible');
+  }
+
   show(element) {
     return new Promise((resolve) => {
+      this.addCloseIcon();
       this.content.appendChild(element);
       this.modal.classList.add('visible');
       this.closeIcon.addEventListener('click', () => {

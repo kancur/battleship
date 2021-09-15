@@ -1,10 +1,14 @@
 import GameBoardFactory from '../Gameboard/GameboardFactory';
 
 export default function PlayerFactory(name) {
+  let playerName = name;
   const board = GameBoardFactory();
   const arrayOfHits = [];
 
-  const getName = () => name;
+  const getName = () => playerName;
+  const setName = (newName) => {
+    playerName = newName;
+  };
   const getBoard = () => board;
 
   const attack = (x, y, enemyPlayer) => {
@@ -73,6 +77,11 @@ export default function PlayerFactory(name) {
     return attackRandomPosition(player);
   };
   return ({
-    getName, getBoard, attack, attackRandomPosition, delayedRandomAttack,
+    getName,
+    setName,
+    getBoard,
+    attack,
+    attackRandomPosition,
+    delayedRandomAttack,
   });
 }

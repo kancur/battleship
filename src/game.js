@@ -1,10 +1,10 @@
 import DOMmanager from './dom/DOMmanager';
 import PlayerFactory from './modules/Player/PlayerFactory';
-import { SHIP_LENGTHS } from './assets/CONSTANTS';
+import { AI_DELAY, SHIP_LENGTHS } from './assets/CONSTANTS';
 
 export function game() {
   return new Promise((resolve) => {
-    const player = PlayerFactory('Peter');
+    const player = PlayerFactory('placeholder');
     const enemy = PlayerFactory('Computer');
     const playerBoard = player.getBoard();
     const enemyBoard = enemy.getBoard();
@@ -15,10 +15,19 @@ export function game() {
       handlePlayerCellClick,
       handlePlayerCellHover,
     );
+
+    getPlayerName();
+
     let listenForClicksEnemyBoard = false;
     let nextPlayer = 'player';
     let placingShips = true;
     let currentShipID = 0;
+
+    async function getPlayerName() {
+      const name = await displayManager.showNameModal();
+      player.setName(name);
+      displayManager.setPlayerName(name);
+    }
 
     async function checkWinner() {
       if (playerBoard.areAllShipsSunk() === true) {
@@ -45,7 +54,7 @@ export function game() {
     };
 
     const computerTurn = async () => {
-      const enemyAttackData = await enemy.delayedRandomAttack(100, player);
+      const enemyAttackData = await enemy.delayedRandomAttack(AI_DELAY, player);
       checkWinner();
       displayManager.renderBoards();
 
@@ -77,21 +86,28 @@ export function game() {
       }
     };
 
+    let prevData;
     function handlePlayerCellHover(data) {
       if (placingShips) {
-        try {
-          playerBoard.previewShipPlacement(Number(data.x), Number(data.y), false, 4);
-          displayManager.renderBoards();
-        } catch (error) {
+        if (prevData?.x !== data.x || prevData?.y !== data.y) {
+          try {
+            playerBoard.previewShipPlacement(
+              Number(data.x),
+              Number(data.y),
+              false,
+              SHIP_LENGTHS[currentShipID],
+            );
+            displayManager.renderBoards();
+            prevData = { ...data };
+          } catch (error) {
+          }
         }
       }
     }
 
     async function handlePlayerCellClick(data) {
-      console.log('handling click');
       if (placingShips) {
-        if (SHIP_LENGTHS[currentShipID]) {
-          console.log('gonna try placing ship');
+        if (currentShipID < SHIP_LENGTHS.length) {
           try {
             playerBoard.placeShip(
               Number(data.x),
@@ -105,16 +121,19 @@ export function game() {
               // do nothing, ignore those errors
             }
           }
-        } else {
+        }
+        if (currentShipID === SHIP_LENGTHS.length) {
           placingShips = false;
           currentShipID = 0;
           listenForClicksEnemyBoard = true;
+          await playerBoard.cleanPreviousPreview();
+          displayManager.renderBoards();
         }
-        //displayManager.renderBoards();
       }
     }
 
     function handleEnemyCellClick(data) {
+      console.log('enemy click')
       if (listenForClicksEnemyBoard) {
         oneGameTurn(data);
       }
