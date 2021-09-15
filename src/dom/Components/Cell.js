@@ -8,8 +8,8 @@ export default function cell(x, y, cellData, boardData, handleCellClick, handleC
     cellEl.classList.add('ship');
   }
 
-  if (cellData.isPhantom === true) {
-    cellEl.classList.add('phantom');
+  if (cellData.isPreview === true) {
+    cellEl.classList.add('preview');
   }
 
   if (cellData.isShip === false && cellData.isHit === true) {
@@ -25,7 +25,8 @@ export default function cell(x, y, cellData, boardData, handleCellClick, handleC
   }
 
   if (handleCellClick) {
-    cellEl.addEventListener('click', () => handleCellClick({ x: cellEl.dataset.x, y: cellEl.dataset.y }));
+    //cellEl.addEventListener('click', () => handleCellClick({ x: cellEl.dataset.x, y: cellEl.dataset.y }));
+    cellEl.addEventListener('click', () => console.log('clicked'));
   }
 
   if (handleCellHover) {

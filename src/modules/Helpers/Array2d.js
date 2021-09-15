@@ -1,11 +1,15 @@
 export default function Array2D(size, defaultValue) {
   const matrice = [];
 
-  for (let i = 0; i < size; i += 1) {
-    matrice.push(new Array(size).fill(defaultValue));
+  const initialize = () => {
+    for (let i = 0; i < size; i += 1) {
+      matrice.push(new Array(size).fill(defaultValue));
+    }
   }
 
-  const setSingleValue = (x, y, state) => {
+  initialize();
+
+  const setSingleCellObject = (x, y, state) => {
     if (x < size && y < size) {
       matrice[y][x] = state;
       return true;
@@ -15,6 +19,15 @@ export default function Array2D(size, defaultValue) {
 
   const getArray = () => matrice;
 
+  const writeSingleCellObjectValue = (x, y, key, value) => {
+    if (x < size && y < size) {
+      const obj = matrice[y][x];
+      const newObj = { ...obj };
+      newObj[key] = value;
+      matrice[y][x] = newObj;
+    }
+  };
+
   const getSingleValue = (x, y) => {
     if (x < size && y < size) {
       return matrice[y][x];
@@ -22,5 +35,5 @@ export default function Array2D(size, defaultValue) {
     throw new Error('Coordinates out of bounds');
   };
 
-  return { setSingleValue, getArray, getSingleValue };
+  return { setSingleCellObject, getArray, getSingleValue, writeSingleCellObjectValue };
 }

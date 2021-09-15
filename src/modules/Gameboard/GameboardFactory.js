@@ -10,11 +10,11 @@ export default function GameBoardFactory() {
     {
       isShip: false,
       isHit: false,
+      isPreview: false,
     },
   );
 
-  const placeShip = (x, y, isVertical, length) => {
-    const ship = ShipFactory(length);
+  const prepareShipCoords = (x, y, isVertical, length) => {
     const preparedCoords = [];
     for (let i = 0; i < length; i += 1) {
       let yAxis;
@@ -38,13 +38,42 @@ export default function GameBoardFactory() {
         throw new OverlapError('Ship overlaps already existing ship');
       }
 
-      // have to push coords into a list instead of directly settting values
-      // because the ship might overlap and then I just want to throw it away
       preparedCoords.push({ xAxis, yAxis });
     }
+    return preparedCoords;
+  };
+
+  let previousPreparedCoords = [];
+  const previewShipPlacement = (x, y, isVertical, length) => {
+    previousPreparedCoords.forEach((coords) => {
+      matrice.writeSingleCellObjectValue(
+        coords.xAxis,
+        coords.yAxis,
+        'isPreview',
+        false,
+      );
+    });
+
+    const preparedCoords = prepareShipCoords(x, y, isVertical, length);
+    previousPreparedCoords = preparedCoords;
 
     preparedCoords.forEach((coords) => {
-      matrice.setSingleValue(
+      matrice.writeSingleCellObjectValue(
+        coords.xAxis,
+        coords.yAxis,
+        'isPreview',
+        true,
+      );
+    });
+  };
+
+  const placeShip = (x, y, isVertical, length) => {
+    console.log('place ship')
+    const ship = ShipFactory(length);
+    const preparedCoords = prepareShipCoords(x, y, isVertical, length);
+
+    preparedCoords.forEach((coords) => {
+      matrice.setSingleCellObject(
         coords.xAxis,
         coords.yAxis,
         {
@@ -113,7 +142,7 @@ export default function GameBoardFactory() {
       };
     }
 
-    matrice.setSingleValue(x, y, data);
+    matrice.setSingleCellObject(x, y, data);
     return data;
   };
 
@@ -130,5 +159,6 @@ export default function GameBoardFactory() {
     getArray,
     autoPlaceShips,
     getSunkShips,
+    previewShipPlacement,
   };
 }

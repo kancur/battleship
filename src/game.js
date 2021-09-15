@@ -13,6 +13,7 @@ export function game() {
       enemyBoard,
       handleEnemyCellClick,
       handlePlayerCellClick,
+      handlePlayerCellHover,
     );
     let listenForClicksEnemyBoard = false;
     let nextPlayer = 'player';
@@ -76,11 +77,28 @@ export function game() {
       }
     };
 
+    function handlePlayerCellHover(data) {
+      if (placingShips) {
+        try {
+          playerBoard.previewShipPlacement(Number(data.x), Number(data.y), false, 4);
+          displayManager.renderBoards();
+        } catch (error) {
+        }
+      }
+    }
+
     async function handlePlayerCellClick(data) {
+      console.log('handling click');
       if (placingShips) {
         if (SHIP_LENGTHS[currentShipID]) {
+          console.log('gonna try placing ship');
           try {
-            playerBoard.placeShip(Number(data.x), Number(data.y), false, SHIP_LENGTHS[currentShipID]);
+            playerBoard.placeShip(
+              Number(data.x),
+              Number(data.y),
+              false,
+              SHIP_LENGTHS[currentShipID],
+            );
             currentShipID += 1;
           } catch (error) {
             if (error.name === 'OutOfBoundsError' || error.name === 'OverlapError') {
@@ -92,7 +110,7 @@ export function game() {
           currentShipID = 0;
           listenForClicksEnemyBoard = true;
         }
-        displayManager.renderBoards();
+        //displayManager.renderBoards();
       }
     }
 
