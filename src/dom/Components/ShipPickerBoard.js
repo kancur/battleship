@@ -1,14 +1,11 @@
+import { SHIP_LENGTHS } from '../../CONSTANTS';
 import './styles/ShipPickerBoard.css';
 
-export default function ShipPickerBoard(rotateHandler) {
+export default function ShipPickerBoard(rotateHandler, getCurrentShipID) {
   let isVertical = false;
-  let currentShipLength;
-
-  const setCurrentShipLength = (length) => {
-    currentShipLength = length;
-  };
 
   const boardWrap = document.createElement('div');
+  boardWrap.id = 'ship-picker';
   boardWrap.classList.add('board-wrap');
 
   const shipPicker = document.createElement('div');
@@ -31,8 +28,8 @@ export default function ShipPickerBoard(rotateHandler) {
     rotateHandler();
   });
 
-  const displayCurrentShip = () => {
-    console.log('displaying current ship with length', currentShipLength);
+  const getCurrentShipDOM = () => {
+    const currentShipLength = SHIP_LENGTHS[getCurrentShipID()];
     const shipElement = document.createElement('div');
     if (isVertical) {
       shipElement.classList.add('is-vertical');
@@ -54,12 +51,13 @@ export default function ShipPickerBoard(rotateHandler) {
   };
   const render = () => {
     clean();
-    currentShipWrap.appendChild(displayCurrentShip(length));
+    const currentShip = getCurrentShipDOM();
+    currentShipWrap.appendChild(currentShip);
     shipPicker.append(arrowLeft, title, button, currentShipWrap);
     boardWrap.append(shipPicker);
   };
 
   const getBoardWrap = () => boardWrap;
 
-  return { getBoardWrap, displayCurrentShip, render, setCurrentShipLength };
+  return { getBoardWrap, displayCurrentShip: getCurrentShipDOM, render };
 }

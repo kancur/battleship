@@ -11,17 +11,50 @@ export default function DOMmanager(
   handlePlayerCellClick,
   handlePlayerCellHover,
   rotateHandler,
+  getCurrentShipID,
 ) {
-  const gamearea = document.querySelector('.gamearea');
-  const playerDestroyedShips = new DestroyedShips();
-  const enemyDestroyedShips = new DestroyedShips();
-  const shipPickerBoard = ShipPickerBoard(rotateHandler);
-
   let showingModal = false;
-  let playerName = 'Player';
-  let boardsType = 'intro';
+  const gamearea = document.querySelector('.gamearea');
+  gamearea.textContent = '';
+  const playerDestroyedShipsDOM = new DestroyedShips();
+  const enemyDestroyedShipsDOM = new DestroyedShips();
+  const shipPickerBoard = ShipPickerBoard(rotateHandler, getCurrentShipID);
+  const boardsWrapper = document.createElement('div');
+  boardsWrapper.classList.add('boards-wrapper');
+  const playerBoardDOM = Board(
+    {
+      name: 'Player',
+      type: 'player',
+    },
+    handlePlayerCellClick,
+    handlePlayerCellHover,
+  );
+  const enemyBoardDOM = Board(
+    {
+      name: 'Enemy',
+      type: 'enemy',
+    },
+    handleEnemyCellClick,
+  );
 
-  const setBoardsType = (name) => { boardsType = name; };
+  const setPlayerName = (name) => playerBoardDOM.setName(name);
+
+  const initialize = () => {
+    const playerDestroyedShips = (playerDestroyedShipsDOM.getElement());
+    const enemyDestroyedShips = (enemyDestroyedShipsDOM.getElement());
+
+    boardsWrapper.appendChild(playerBoardDOM.getBoardDiv());
+    boardsWrapper.appendChild(shipPickerBoard.getBoardWrap());
+    gamearea.append(playerDestroyedShips, boardsWrapper, enemyDestroyedShips);
+    shipPickerBoard.displayCurrentShip();
+  };
+  initialize();
+
+  const switchToEnemyBoard = () => {
+    const shipPicker = document.getElementById('ship-picker');
+    shipPicker.remove();
+    boardsWrapper.appendChild(enemyBoardDOM.getBoardDiv());
+  };
 
   const showWinModal = async (name) => {
     if (!showingModal) {
@@ -42,63 +75,26 @@ export default function DOMmanager(
   };
 
   const cleanBoards = () => {
-    gamearea.textContent = '';
+    playerBoardDOM.clean();
+    enemyBoardDOM.clean();
   };
 
   const renderBoards = () => {
     cleanBoards();
+    playerBoardDOM.render(playerBoard.getArray());
+    enemyBoardDOM.render(enemyBoard.getArray());
 
-    const playerBoardDOM = Board(
-      playerBoard.getArray(),
-      {
-        title: `${playerName}'s task force`,
-        type: 'player',
-      },
-      handlePlayerCellClick,
-      handlePlayerCellHover,
-    );
-
-    const enemyBoardDOM = Board(
-      enemyBoard.getArray(),
-      {
-        title: "Enemy's task force",
-        type: 'enemy',
-      },
-      handleEnemyCellClick,
-    );
-
-    const boards = document.createElement('div');
-    boards.classList.add('boards-wrapper');
-
-    gamearea.appendChild(playerDestroyedShips.getElement());
-    boards.appendChild(playerBoardDOM.getBoardDiv());
-
-    if (boardsType === 'game') {
-      boards.append(enemyBoardDOM.getBoardDiv());
-    }
-    if (boardsType === 'intro') {
-      shipPickerBoard.setCurrentShipLength(5);
-      shipPickerBoard.displayCurrentShip();
-      shipPickerBoard.render();
-      boards.appendChild(shipPickerBoard.getBoardWrap());
-    }
-    gamearea.appendChild(boards);
-    gamearea.appendChild(enemyDestroyedShips.getElement());
-  };
-
-  const setPlayerName = (name) => {
-    playerName = name;
-    renderBoards();
+    shipPickerBoard.render();
   };
 
   const appendDestroyedShip = (ship, player) => {
     // eslint-disable-next-line default-case
     switch (player) {
       case 'player':
-        playerDestroyedShips.appendShip(ship);
+        playerDestroyedShipsDOM.appendShip(ship);
         break;
       case 'enemy':
-        enemyDestroyedShips.appendShip(ship);
+        enemyDestroyedShipsDOM.appendShip(ship);
         break;
     }
   };
@@ -108,7 +104,7 @@ export default function DOMmanager(
     appendDestroyedShip,
     handleWin: showWinModal,
     showNameModal,
+    switchToEnemyBoard,
     setPlayerName,
-    setBoardsType,
   };
 }

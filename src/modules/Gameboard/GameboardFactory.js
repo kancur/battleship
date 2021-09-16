@@ -149,6 +149,7 @@ export default function GameBoardFactory() {
       data = {
         isShip: cell.isShip,
         isHit: true,
+        isSunk: cell.isShip.isSunk(),
       };
     }
 

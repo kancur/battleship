@@ -2,7 +2,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #00000025;
+  background-color: #00000066;
   backdrop-filter: blur(2px);
   display: none;
   justify-content: center;
@@ -14,7 +14,7 @@
   position: relative;
   background-color: white;
   border-radius: 15px;
-  padding: 20px 40px;
+  padding: 40px 45px;
   box-shadow: 4px 5px 20px #00000066;
 }
 
@@ -40,13 +40,29 @@
 
 .modal-box input, button {
   font-size: 1.2em;
+  width: fit-content;
+  margin: auto;
 }
 
 .modal-box input {
-  margin-bottom: 1.6em;
+  margin-bottom: 0em;
+}
+
+.invalid-input {
+  border: 2px dashed red;
 }
 
 .modal-box h2 {
   text-align: center;
   font-size: 2em;
+  margin-top: 0px;
+}
+
+.modal-box span {
+  display: none;
+  font-size: 14px;
+  font-family: serif;
+  color: rgb(212, 41, 41);
+  position: absolute;
+  margin-top: 5px;
 }

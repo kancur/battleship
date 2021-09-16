@@ -1,28 +1,35 @@
 import Cell from './Cell';
 
-function heading(title) {
+export default function Board(boardData, handleCellClick, handleCellHover) {
+  const boardWrapper = document.createElement('div');
+  boardWrapper.classList.add('board-wrap');
+  const board = document.createElement('div');
+  board.classList.add('board');
   const boardHeading = document.createElement('h2');
-  boardHeading.textContent = title;
-  return boardHeading;
-}
+  boardHeading.textContent = `${boardData.name}'s fleet`;
 
-export default function Board(array, boardData, handleCellClick, handleCellHover) {
-  const boardWrap = document.createElement('div');
-  boardWrap.classList.add('board-wrap');
-  const boardDiv = document.createElement('div');
-  const boardTitle = heading(boardData?.title);
-  boardDiv.classList.add('board');
+  const changeHeadingName = (name) => {
+    boardHeading.textContent = `${name}'s fleet`;
+  };
 
-  array.forEach((rowData, y) => {
-    rowData.forEach((cellData, x) => {
-      const currentCell = Cell(x, y, cellData, boardData, handleCellClick, handleCellHover);
-      boardDiv.appendChild(currentCell);
+  const setName = (name) => changeHeadingName(name);
+
+  const clean = () => {
+    board.textContent = '';
+  };
+
+  const render = (array) => {
+    array.forEach((rowData, y) => {
+      rowData.forEach((cellData, x) => {
+        const currentCell = Cell(x, y, cellData, boardData, handleCellClick, handleCellHover);
+        board.appendChild(currentCell);
+      });
     });
-  });
+  };
 
-  boardWrap.append(boardTitle, boardDiv);
+  boardWrapper.append(boardHeading, board);
 
-  const getBoardDiv = () => boardWrap;
+  const getBoardDiv = () => boardWrapper;
 
-  return { getBoardDiv };
+  return { getBoardDiv, render, clean, setName };
 }
