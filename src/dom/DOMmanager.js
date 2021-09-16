@@ -15,6 +15,8 @@ export default function DOMmanager(
   const gamearea = document.querySelector('.gamearea');
   const playerDestroyedShips = new DestroyedShips();
   const enemyDestroyedShips = new DestroyedShips();
+  const shipPickerBoard = ShipPickerBoard(rotateHandler);
+
   let showingModal = false;
   let playerName = 'Player';
   let boardsType = 'intro';
@@ -46,9 +48,24 @@ export default function DOMmanager(
   const renderBoards = () => {
     cleanBoards();
 
-    const playerBoardDOM = Board(playerBoard.getArray(), { title: `${playerName}'s task force`, type: 'player' }, handlePlayerCellClick, handlePlayerCellHover);
-    const enemyBoardDOM = Board(enemyBoard.getArray(), { title: "Enemy's task force", type: 'enemy' }, handleEnemyCellClick);
-    const shipPickerBoard = ShipPickerBoard(rotateHandler);
+    const playerBoardDOM = Board(
+      playerBoard.getArray(),
+      {
+        title: `${playerName}'s task force`,
+        type: 'player',
+      },
+      handlePlayerCellClick,
+      handlePlayerCellHover,
+    );
+
+    const enemyBoardDOM = Board(
+      enemyBoard.getArray(),
+      {
+        title: "Enemy's task force",
+        type: 'enemy',
+      },
+      handleEnemyCellClick,
+    );
 
     const boards = document.createElement('div');
     boards.classList.add('boards-wrapper');
@@ -60,7 +77,10 @@ export default function DOMmanager(
       boards.append(enemyBoardDOM.getBoardDiv());
     }
     if (boardsType === 'intro') {
-      boards.appendChild(shipPickerBoard);
+      shipPickerBoard.setCurrentShipLength(5);
+      shipPickerBoard.displayCurrentShip();
+      shipPickerBoard.render();
+      boards.appendChild(shipPickerBoard.getBoardWrap());
     }
     gamearea.appendChild(boards);
     gamearea.appendChild(enemyDestroyedShips.getElement());

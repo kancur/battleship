@@ -1,6 +1,7 @@
+import 'regenerator-runtime/runtime';
 import Array2D from '../Helpers/Array2d';
 import ShipFactory from '../Ship/ShipFactory';
-import EDGE_SIZE from '../../CONSTANTS';
+import { EDGE_SIZE } from '../../CONSTANTS';
 import { OutOfBoundsError, OverlapError } from './CustomErrors';
 
 export default function GameBoardFactory() {
@@ -13,13 +14,14 @@ export default function GameBoardFactory() {
       isPreview: false,
     },
   );
+  let previousPreviewedCoords = [];
 
   /**
   * Prepares ship coordinates by checking for bounds and intersects
   * Throws error on bound or intersect violation
   * @return {Array} Array of objects containing (x,y) coordinates.
   */
-  const prepareShipCoords = (x, y, isVertical, length) => {
+  const prepareShipCoordinates = (x, y, isVertical, length) => {
     const preparedCoords = [];
     for (let i = 0; i < length; i += 1) {
       let yAxis;
@@ -38,8 +40,9 @@ export default function GameBoardFactory() {
         throw new OutOfBoundsError("Ship doesn't fit the gameboard");
       }
 
-      const currentDataOnPosition = matrice.getSingleValue(xAxis, yAxis);
-      if (currentDataOnPosition.isShip !== false) {
+      const currentDataOnCoordinates = matrice.getSingleValue(xAxis, yAxis);
+
+      if (currentDataOnCoordinates.isShip !== false) {
         throw new OverlapError('Ship overlaps already existing ship');
       }
 
@@ -48,10 +51,9 @@ export default function GameBoardFactory() {
     return preparedCoords;
   };
 
-  let previousPreparedCoords = [];
-  const cleanPreviousPreview = async () => {
-    await previousPreparedCoords.forEach((coords) => {
-      matrice.writeSingleCellObjectValue(
+  const cleanPreviousShipPreview = async () => {
+    await previousPreviewedCoords.forEach((coords) => {
+      matrice.writeSingleCellKeyPair(
         coords.xAxis,
         coords.yAxis,
         'isPreview',
@@ -61,12 +63,12 @@ export default function GameBoardFactory() {
   };
 
   const previewShipPlacement = (x, y, isVertical, length) => {
-    cleanPreviousPreview();
-    const preparedCoords = prepareShipCoords(x, y, isVertical, length);
-    previousPreparedCoords = preparedCoords;
+    cleanPreviousShipPreview();
+    const preparedCoords = prepareShipCoordinates(x, y, isVertical, length);
+    previousPreviewedCoords = preparedCoords;
 
     preparedCoords.forEach((coords) => {
-      matrice.writeSingleCellObjectValue(
+      matrice.writeSingleCellKeyPair(
         coords.xAxis,
         coords.yAxis,
         'isPreview',
@@ -77,7 +79,7 @@ export default function GameBoardFactory() {
 
   const placeShip = (x, y, isVertical, length) => {
     const ship = ShipFactory(length);
-    const preparedCoords = prepareShipCoords(x, y, isVertical, length);
+    const preparedCoords = prepareShipCoordinates(x, y, isVertical, length);
 
     preparedCoords.forEach((coords) => {
       matrice.setSingleCellObject(
@@ -94,20 +96,24 @@ export default function GameBoardFactory() {
     return ship;
   };
 
-  const autoPlaceShips = (arrayOfLengths) => {
-    arrayOfLengths.forEach((shipLength) => {
-      const calculateCoordsAndPlace = () => {
-        let x;
-        let y;
-        const isVertical = Math.random() < 0.5;
-        if (isVertical) {
-          y = Math.floor(Math.random() * (EDGE_SIZE - shipLength));
-          x = Math.floor(Math.random() * EDGE_SIZE);
-        } else {
-          x = Math.floor(Math.random() * (EDGE_SIZE - shipLength));
-          y = Math.floor(Math.random() * EDGE_SIZE);
-        }
+  const getRandomCoords = (isVertical, shipLength) => {
+    let x;
+    let y;
+    if (isVertical) {
+      y = Math.floor(Math.random() * (EDGE_SIZE - shipLength));
+      x = Math.floor(Math.random() * EDGE_SIZE);
+    } else {
+      x = Math.floor(Math.random() * (EDGE_SIZE - shipLength));
+      y = Math.floor(Math.random() * EDGE_SIZE);
+    }
+    return { x, y };
+  };
 
+  const autoPlaceShips = (shipLengths) => {
+    shipLengths.forEach((shipLength) => {
+      const prepareCoordsAndPlace = () => {
+        const isVertical = Math.random() < 0.5;
+        const { x, y } = getRandomCoords(isVertical, shipLength);
         try {
           placeShip(x, y, isVertical, shipLength);
         } catch (error) {
@@ -115,11 +121,17 @@ export default function GameBoardFactory() {
         }
       };
 
-      let status = '';
+      let status;
+      let maxRetries = 100;
       do {
-        status = calculateCoordsAndPlace();
+        status = prepareCoordsAndPlace();
+        maxRetries -= 1;
+        if (maxRetries <= 0) {
+          throw new Error("Couldn't autoplace your ships (max retries exceeded)");
+        }
       } while (status === 'error');
     });
+    return true;
   };
 
   const receiveAttack = (x, y) => {
@@ -128,7 +140,7 @@ export default function GameBoardFactory() {
 
     // throw error if the cell was already hit
     if (cell.isHit === true) {
-      throw new Error(`Cannot hit the same place twice (${x}, ${y})`);
+      throw new Error('Cannot hit the same place twice');
     }
 
     // register a ship hit if there's a ship on the coords and is not hit
@@ -137,7 +149,6 @@ export default function GameBoardFactory() {
       data = {
         isShip: cell.isShip,
         isHit: true,
-        isSunk: cell.isShip.isSunk(),
       };
     }
 
@@ -167,6 +178,6 @@ export default function GameBoardFactory() {
     autoPlaceShips,
     getSunkShips,
     previewShipPlacement,
-    cleanPreviousPreview,
+    cleanPreviousShipPreview,
   };
 }

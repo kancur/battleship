@@ -106,6 +106,7 @@ export function game() {
             displayManager.renderBoards();
             prevData = { ...data };
           } catch (error) {
+            // ignore
           }
         }
       }
@@ -132,7 +133,7 @@ export function game() {
           placingShips = false;
           currentShipID = 0;
           listenForClicksEnemyBoard = true;
-          await playerBoard.cleanPreviousPreview();
+          await playerBoard.cleanPreviousShipPreview();
           displayManager.setBoardsType('game');
           displayManager.renderBoards();
         }
@@ -140,7 +141,6 @@ export function game() {
     }
 
     function handleEnemyCellClick(data) {
-      console.log('enemy click')
       if (listenForClicksEnemyBoard) {
         oneGameTurn(data);
       }

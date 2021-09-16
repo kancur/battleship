@@ -2,7 +2,7 @@ import closeIcon from './CloseIcon';
 import './styles/Modal.css';
 
 class Modal {
-  constructor(showCloseIcon = true) {
+  constructor() {
     this.modal = document.querySelector('.modal');
     this.content = document.createElement('div');
 

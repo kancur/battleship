@@ -24,6 +24,7 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "@types/jest": "^27.0.1"
+    "@types/jest": "^27.0.1",
+    "regenerator-runtime": "^0.13.9"
   }
 }

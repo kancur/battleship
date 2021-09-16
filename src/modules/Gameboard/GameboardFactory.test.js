@@ -1,3 +1,5 @@
+import { EDGE_SIZE } from '../../CONSTANTS';
+import { OutOfBoundsError } from './CustomErrors';
 import GameBoardFactory from './GameboardFactory';
 
 describe('gameboard factory methods', () => {
@@ -6,16 +8,16 @@ describe('gameboard factory methods', () => {
     gameBoard = GameBoardFactory();
   });
 
-  it('Place new ship', () => {
+  test('Place new ship', () => {
     expect(gameBoard.placeShip(0, 0, false, 4)).toBeInstanceOf(Object);
   });
 
   it("Place new ship so it won't fit on x axis", () => {
-    expect(() => gameBoard.placeShip(8, 0, false, 4)).toThrow("Ship doesn't fit the gameboard");
+    expect(() => gameBoard.placeShip(8, 0, false, 4)).toThrow(OutOfBoundsError);
   });
 
   it("Place new ship so it won't fit on y axis", () => {
-    expect(() => gameBoard.placeShip(0, 7, true, 4)).toThrow("Ship doesn't fit the gameboard");
+    expect(() => gameBoard.placeShip(0, 7, true, 4)).toThrow(OutOfBoundsError);
   });
 
   it('Place new ship so it barely fits', () => {
@@ -46,5 +48,22 @@ describe('gameboard factory methods', () => {
     gameBoard.receiveAttack(0, 0);
     gameBoard.receiveAttack(1, 0);
     expect(gameBoard.areAllShipsSunk()).toBe(true);
+  });
+
+  it('Return a list of sunk ships', () => {
+    gameBoard.placeShip(0, 0, false, 2);
+    gameBoard.receiveAttack(0, 0);
+    gameBoard.receiveAttack(1, 0);
+    expect(gameBoard.getSunkShips()).toHaveLength(1);
+  });
+
+  it('Returns array of correct length', () => {
+    expect(gameBoard.getArray()).toBeInstanceOf(Array);
+    expect(gameBoard.getArray()).toHaveLength(EDGE_SIZE);
+  });
+
+  it('Automatically places ships on random places', () => {
+    expect(gameBoard.autoPlaceShips([5, 5])).toBeTruthy();
+    expect(() => gameBoard.autoPlaceShips([10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2])).toThrow("Couldn't autoplace your ships (max retries exceeded)");
   });
 });
