@@ -1,10 +1,10 @@
 import Array2D from '../Helpers/Array2d';
 import ShipFactory from '../Ship/ShipFactory';
+import EDGE_SIZE from '../../CONSTANTS';
 import { OutOfBoundsError, OverlapError } from './CustomErrors';
 
 export default function GameBoardFactory() {
-  const EDGE_SIZE = 10;
-  const myShips = [];
+  const placedShips = [];
   const matrice = Array2D(
     EDGE_SIZE,
     {
@@ -14,6 +14,11 @@ export default function GameBoardFactory() {
     },
   );
 
+  /**
+  * Prepares ship coordinates by checking for bounds and intersects
+  * Throws error on bound or intersect violation
+  * @return {Array} Array of objects containing (x,y) coordinates.
+  */
   const prepareShipCoords = (x, y, isVertical, length) => {
     const preparedCoords = [];
     for (let i = 0; i < length; i += 1) {
@@ -85,7 +90,7 @@ export default function GameBoardFactory() {
       );
     });
 
-    myShips.push(ship);
+    placedShips.push(ship);
     return ship;
   };
 
@@ -148,9 +153,9 @@ export default function GameBoardFactory() {
     return data;
   };
 
-  const areAllShipsSunk = () => myShips.every((ship) => ship.isSunk());
+  const areAllShipsSunk = () => placedShips.every((ship) => ship.isSunk());
 
-  const getSunkShips = () => myShips.filter((ship) => ship.isSunk());
+  const getSunkShips = () => placedShips.filter((ship) => ship.isSunk());
 
   const getArray = () => matrice.getArray();
 

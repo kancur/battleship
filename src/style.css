@@ -133,13 +133,3 @@ header p {
 .preview {
   background-color: rgb(127, 235, 127);
 }
-
-.modal-box input, button {
-  font-size: 1.2em;
-}
-
-.modal-box h2 {
-  text-align: center;
-  font-size: 2em;
-  margin-top: 4px;
-}

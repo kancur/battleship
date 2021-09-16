@@ -31,16 +31,15 @@ export default function PlayerFactory(name) {
     return result;
   };
 
-  /*
   const smartAttack = (enemyPlayer) => {
+    let previousHit;
     if (arrayOfHits.length === 1) {
-      const { x, y } = (arrayOfHits[arrayOfHits.length - 1]);
+      previousHit = arrayOfHits[arrayOfHits.length - 1]
+      const { x, y } = previousHit;
 
-      wasAlreadyHit({ x, y });
       attack(x + 1, y, enemyPlayer);
     }
   };
-  */
 
   const attackRandomPosition = (enemyPlayer) => {
     if (arrayOfHits >= 100) {

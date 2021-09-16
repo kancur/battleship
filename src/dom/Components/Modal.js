@@ -36,12 +36,6 @@ class Modal {
         resolve();
         this.cleanModal();
       });
-      /*
-      this.modal.addEventListener('click', () => {
-        this.cleanModal();
-        resolve();
-      });
-      */
     });
   }
 

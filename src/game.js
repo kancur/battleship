@@ -1,6 +1,6 @@
 import DOMmanager from './dom/DOMmanager';
 import PlayerFactory from './modules/Player/PlayerFactory';
-import { AI_DELAY, SHIP_LENGTHS } from './assets/CONSTANTS';
+import { AI_DELAY, SHIP_LENGTHS } from './CONSTANTS';
 
 export function game() {
   return new Promise((resolve) => {

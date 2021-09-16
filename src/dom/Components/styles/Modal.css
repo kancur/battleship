@@ -42,8 +42,11 @@
   font-size: 1.2em;
 }
 
+.modal-box input {
+  margin-bottom: 1.6em;
+}
+
 .modal-box h2 {
   text-align: center;
   font-size: 2em;
-  margin-top: 4px;
 }
