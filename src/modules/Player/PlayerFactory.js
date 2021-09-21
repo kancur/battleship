@@ -31,16 +31,6 @@ export default function PlayerFactory(name) {
     return result;
   };
 
-  const smartAttack = (enemyPlayer) => {
-    let previousHit;
-    if (arrayOfHits.length === 1) {
-      previousHit = arrayOfHits[arrayOfHits.length - 1]
-      const { x, y } = previousHit;
-
-      attack(x + 1, y, enemyPlayer);
-    }
-  };
-
   const attackRandomPosition = (enemyPlayer) => {
     if (arrayOfHits >= 100) {
       return;
@@ -68,6 +58,17 @@ export default function PlayerFactory(name) {
     const attackData = attack(uniqueCoords.x, uniqueCoords.y, enemyPlayer);
     // eslint-disable-next-line consistent-return
     return attackData;
+  };
+
+  let previousHit;
+  const smartAttack = (enemyPlayer) => {
+    if (previousHit) {
+      const { x, y } = previousHit;
+
+      attack(x + 1, y, enemyPlayer);
+    } else {
+      previousHit = attackRandomPosition();
+    }
   };
 
   const delayedRandomAttack = async (delay, player) => {

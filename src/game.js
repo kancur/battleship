@@ -1,9 +1,11 @@
+/* eslint-disable no-use-before-define */
 import DOMmanager from './dom/DOMmanager';
 import PlayerFactory from './modules/Player/PlayerFactory';
 import { AI_DELAY, SHIP_LENGTHS } from './CONSTANTS';
 
-export function game() {
+export async function gameLoop(lastUsedName) {
   return new Promise((resolve) => {
+    let currentShipID = 0;
     const player = PlayerFactory('placeholder');
     const enemy = PlayerFactory('Computer');
     const playerBoard = player.getBoard();
@@ -15,34 +17,48 @@ export function game() {
       handlePlayerCellClick,
       handlePlayerCellHover,
       rotateHandler,
+      getCurrentShipID,
     );
-
-    getPlayerName();
 
     let listenForClicksEnemyBoard = false;
     let nextPlayer = 'player';
     let placingShips = true;
-    let currentShipID = 0;
     let isShipVertical = false;
+
+    async function playerNameModal() {
+      const playerName = await getPlayerName();
+      player.setName(playerName);
+      displayManager.setPlayerName(playerName);
+    }
+
+    if (!lastUsedName) {
+      playerNameModal();
+    } else {
+      player.setName(lastUsedName);
+      displayManager.setPlayerName(lastUsedName);
+    }
 
     function rotateHandler() {
       isShipVertical = !isShipVertical;
     }
 
+    function getCurrentShipID() {
+      return currentShipID;
+    }
+
     async function getPlayerName() {
       const name = await displayManager.showNameModal();
-      player.setName(name);
-      displayManager.setPlayerName(name);
+      return name;
     }
 
     async function checkWinner() {
       if (playerBoard.areAllShipsSunk() === true) {
         await displayManager.handleWin(enemy.getName());
-        resolve();
+        resolve(player.getName());
       }
       if (enemyBoard.areAllShipsSunk() === true) {
         await displayManager.handleWin(player.getName());
-        resolve();
+        resolve(player.getName());
       }
     }
 
@@ -106,6 +122,7 @@ export function game() {
             displayManager.renderBoards();
             prevData = { ...data };
           } catch (error) {
+            // ignore
           }
         }
       }
@@ -132,15 +149,14 @@ export function game() {
           placingShips = false;
           currentShipID = 0;
           listenForClicksEnemyBoard = true;
-          await playerBoard.cleanPreviousPreview();
-          displayManager.setBoardsType('game');
+          await playerBoard.cleanPreviousShipPreview();
+          displayManager.switchToEnemyBoard();
           displayManager.renderBoards();
         }
       }
     }
 
     function handleEnemyCellClick(data) {
-      console.log('enemy click')
       if (listenForClicksEnemyBoard) {
         oneGameTurn(data);
       }
@@ -152,8 +168,10 @@ export function game() {
 }
 
 export default async function play() {
+  let lastUsedName;
   while (true) {
     // endless gameplay
-    await game()
+    // eslint-disable-next-line no-await-in-loop
+    lastUsedName = await gameLoop(lastUsedName);
   }
 }

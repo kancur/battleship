@@ -5,7 +5,7 @@ export default function Array2D(size, defaultValue) {
     for (let i = 0; i < size; i += 1) {
       matrice.push(new Array(size).fill(defaultValue));
     }
-  }
+  };
 
   initialize();
 
@@ -35,5 +35,10 @@ export default function Array2D(size, defaultValue) {
     throw new Error('Coordinates out of bounds');
   };
 
-  return { setSingleCellObject, getArray, getSingleValue, writeSingleCellObjectValue };
+  return {
+    setSingleCellObject,
+    getArray,
+    getSingleValue,
+    writeSingleCellKeyPair: writeSingleCellObjectValue,
+  };
 }
