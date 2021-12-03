@@ -13,9 +13,11 @@
 .modal-box {
   position: relative;
   background-color: white;
-  border-radius: 15px;
-  padding: 40px 45px;
+  padding: 30px;
   box-shadow: 4px 5px 20px #00000066;
+  border: #0772cf;
+  border-width: 5px;
+  border-style: solid;
 }
 
 .modal-close {
@@ -38,7 +40,8 @@
   display: flex;
 }
 
-.modal-box input, button {
+.modal-box input,
+button {
   font-size: 1.2em;
   width: fit-content;
   margin: auto;
@@ -65,4 +68,10 @@
   color: rgb(212, 41, 41);
   position: absolute;
   margin-top: 5px;
+}
+
+.name-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
