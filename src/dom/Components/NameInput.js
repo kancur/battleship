@@ -9,6 +9,7 @@ class EnterName {
     return new Promise((resolve) => {
       let name;
       const wrapper = document.createElement('div');
+      wrapper.classList.add('name-input-wrapper');
       const title = document.createElement('h2');
       title.textContent = 'Enter your name';
       const input = document.createElement('input');
