@@ -53,11 +53,15 @@ header p {
   display: flex;
   flex-grow: 1;
   gap: 4%;
+  flex-direction: column-reverse;
   justify-content: space-between;
-  flex-direction: row;
-  
 }
 
+@media only screen and (min-width: 1380px) {
+  .gamearea {
+    flex-direction: row;
+  }
+}
 .board {
   margin: 0 auto 0 auto;
   width: fit-content;
@@ -81,8 +85,14 @@ header p {
 
 .boards-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse;
   width: 100%;
+}
+
+@media only screen and (min-width: 1000px) {
+  .boards-wrapper {
+    flex-direction: row;
+  }
 }
 
 .cell {
@@ -121,7 +131,6 @@ header p {
 
 .destroyed-ship .cell {
   background-color: #ffb0b0;
-  ;
 }
 
 .destroyed-ships-wrapper {
