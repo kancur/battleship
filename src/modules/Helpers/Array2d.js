@@ -9,7 +9,7 @@ export default function Array2D(size, defaultValue) {
 
   initialize();
 
-  const setSingleCellObject = (x, y, state) => {
+  const setSingleCellValue = (x, y, state) => {
     if (x < size && y < size) {
       matrice[y][x] = state;
       return true;
@@ -36,7 +36,7 @@ export default function Array2D(size, defaultValue) {
   };
 
   return {
-    setSingleCellObject,
+    setSingleCellValue,
     getArray,
     getSingleValue,
     writeSingleCellKeyPair: writeSingleCellObjectValue,

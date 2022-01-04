@@ -82,7 +82,7 @@ export default function GameBoardFactory() {
     const preparedCoords = prepareShipCoordinates(x, y, isVertical, length);
 
     preparedCoords.forEach((coords) => {
-      matrice.setSingleCellObject(
+      matrice.setSingleCellValue(
         coords.xAxis,
         coords.yAxis,
         {
@@ -161,7 +161,7 @@ export default function GameBoardFactory() {
       };
     }
 
-    matrice.setSingleCellObject(x, y, data);
+    matrice.setSingleCellValue(x, y, data);
     return data;
   };
 
