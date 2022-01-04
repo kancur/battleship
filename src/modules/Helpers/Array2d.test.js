@@ -9,10 +9,10 @@ describe('ship methods', () => {
     expect(matrice.getSingleValue(0, 0)).toBe(null);
   });
   it('Sets value and returns true', () => {
-    expect(matrice.setSingleValue(3, 6, 'heyThere')).toBe(true);
+    expect(matrice.setSingleCellValue(3, 6, 'heyThere')).toBe(true);
   });
   it('The setted value is set at correct coords', () => {
-    matrice.setSingleValue(3, 6, 'heyThere');
+    matrice.setSingleCellValue(3, 6, 'heyThere');
     expect(matrice.getSingleValue(3, 6)).toBe('heyThere');
   });
 });
