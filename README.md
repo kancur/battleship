@@ -1,4 +1,4 @@
-[![Battleship game featured image](https://github.com/kancur/battleship/blob/main/battleship-featured.png?raw=true)](https://kancur.github.io/battleship/)
+[![kancur github io_battleship_](https://user-images.githubusercontent.com/49352605/148035899-eb57e546-eb5d-42ec-8fbe-432f0d2d1af2.png)](https://kancur.github.io/battleship/)
 # Battleship Game
 
 **[:link:	Click here for live version](https://kancur.github.io/battleship/)**
